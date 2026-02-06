@@ -12,137 +12,145 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            font-family: 'Segoe UI', Tahoma, sans-serif;
-            overflow: hidden; 
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
         }
 
-        /* Falling Hearts Background */
-        .falling-heart {
+        /* Floating Hearts Background */
+        .heart-bg {
             position: fixed;
-            top: -10px;
-            color: #ff6b81;
+            top: -10vh;
             font-size: 20px;
+            color: #ff4d6d;
             user-select: none;
             z-index: -1;
             animation: fall linear forwards;
         }
 
         @keyframes fall {
-            to { transform: translateY(105vh) rotate(360deg); }
+            to { transform: translateY(110vh) rotate(360deg); }
         }
 
         .card {
-            background-color: rgba(255, 255, 255, 0.9);
-            padding: 3rem;
-            border-radius: 25px;
-            box-shadow: 0 15px 35px rgba(233, 30, 99, 0.2);
+            background: white;
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
             text-align: center;
             width: 350px;
-            backdrop-filter: blur(8px);
+            position: relative;
             z-index: 10;
         }
 
-        .heart-main {
-            color: #e91e63;
-            font-size: 60px;
-            animation: beat 0.8s infinite alternate;
+        .main-heart {
+            font-size: 80px;
+            animation: pulse 1s infinite alternate;
         }
 
-        @keyframes beat {
+        @keyframes pulse {
             from { transform: scale(1); }
             to { transform: scale(1.1); }
         }
 
-        .btn-container {
+        h1 { color: #d63384; margin: 20px 0; font-size: 24px; }
+
+        .button-box {
             display: flex;
             justify-content: center;
             gap: 20px;
             margin-top: 30px;
-            position: relative;
-            height: 50px;
+            height: 60px; /* Buffer for buttons */
         }
 
-        button {
-            padding: 12px 28px;
-            border-radius: 50px;
-            border: none;
-            font-size: 1.1rem;
+        .btn {
+            padding: 15px 35px;
+            font-size: 18px;
             font-weight: bold;
+            border: none;
+            border-radius: 50px;
             cursor: pointer;
-            transition: 0.2s; /* Faster transition for the runaway effect */
+            transition: transform 0.2s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
 
         #yes-btn {
-            background-color: #e91e63;
+            background-color: #ff4d6d;
             color: white;
         }
 
         #no-btn {
-            background-color: #ff9a9e;
+            background-color: #adb5bd;
             color: white;
-            position: absolute; /* Needed to move around the screen */
-            left: 180px; /* Initial position */
+            position: absolute; /* Allows freedom of movement */
         }
 
-        #hidden-message {
+        #success-msg {
             display: none;
-            margin-top: 20px;
-            color: #e91e63;
-            font-weight: bold;
-            font-size: 1.6rem;
         }
+
+        #success-msg h2 { color: #ff4d6d; font-size: 28px; }
     </style>
 </head>
 <body>
 
-    <div class="card">
-        <div class="heart-main">❤️</div>
-        <h1 id="question">Rishitha, will you be my Valentine?</h1>
-        
-        <div class="btn-container" id="actions">
-            <button id="yes-btn" onclick="sayYes()">Yes</button>
-            <button id="no-btn" onmouseover="moveButton()" onclick="moveButton()">No</button>
+    <div class="card" id="main-card">
+        <div id="proposal-content">
+            <div class="main-heart">💖</div>
+            <h1>Rishitha, will you be my Valentine?</h1>
+            <div class="button-box">
+                <button id="yes-btn" class="btn" onclick="celebrate()">Yes</button>
+                <button id="no-btn" class="btn" onmouseover="moveNo()" onclick="moveNo()">No</button>
+            </div>
         </div>
 
-        <div id="hidden-message">I knew you'd say yes, Rishitha! 🥰🌹</div>
+        <div id="success-msg">
+            <div class="main-heart">🥰</div>
+            <h2>I knew it! ❤️</h2>
+            <p>See you soon, Rishitha!</p>
+        </div>
     </div>
 
     <script>
-        // The "Runaway" Function
-        function moveButton() {
+        // Function to move the "No" button randomly
+        function moveNo() {
             const btn = document.getElementById('no-btn');
             
-            // Calculate random coordinates
-            // We subtract 100px to ensure the button doesn't go off the edge of the screen
-            const x = Math.random() * (window.innerWidth - 100);
-            const y = Math.random() * (window.innerHeight - 50);
-            
-            // Set the new position
-            btn.style.position = 'fixed';
+            // Generate random X and Y coordinates within the viewport
+            // We subtract button size to keep it within view
+            const x = Math.floor(Math.random() * (window.innerWidth - btn.offsetWidth));
+            const y = Math.floor(Math.random() * (window.innerHeight - btn.offsetHeight));
+
+            btn.style.position = 'fixed'; // Keeps it relative to the screen
             btn.style.left = x + 'px';
             btn.style.top = y + 'px';
         }
 
-        function sayYes() {
-            document.getElementById('actions').style.display = 'none';
-            document.getElementById('question').innerText = "Yay! ❤️";
-            document.getElementById('hidden-message').style.display = 'block';
+        // Function when she clicks "Yes"
+        function celebrate() {
+            document.getElementById('proposal-content').style.display = 'none';
+            document.getElementById('success-msg').style.display = 'block';
             
-            // Celebration: Shower of hearts
-            setInterval(createHeart, 100);
+            // Trigger extra heart burst
+            for(let i=0; i<50; i++) {
+                setTimeout(createHeart, i * 50);
+            }
         }
 
+        // Create falling hearts background
         function createHeart() {
             const heart = document.createElement('div');
-            heart.classList.add('falling-heart');
+            heart.className = 'heart-bg';
             heart.innerHTML = '❤️';
-            heart.style.left = Math.random() * 100 + "vw";
-            heart.style.animationDuration = Math.random() * 2 + 3 + "s";
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            heart.style.opacity = Math.random();
             document.body.appendChild(heart);
+
             setTimeout(() => { heart.remove(); }, 5000);
         }
 
-        setInterval(createHeart, 500);
+        // Start background hearts
+        setInterval(createHeart, 400);
     </script>
 </body>
 </html>
