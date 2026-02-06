@@ -16,7 +16,7 @@
             overflow: hidden; 
         }
 
-        /* Falling Hearts Animation */
+        /* Falling Hearts Background */
         .falling-heart {
             position: fixed;
             top: -10px;
@@ -28,9 +28,7 @@
         }
 
         @keyframes fall {
-            to {
-                transform: translateY(105vh) rotate(360deg);
-            }
+            to { transform: translateY(105vh) rotate(360deg); }
         }
 
         .card {
@@ -42,25 +40,17 @@
             width: 350px;
             backdrop-filter: blur(8px);
             z-index: 10;
-            border: 2px solid #fff;
         }
 
         .heart-main {
             color: #e91e63;
-            font-size: 65px;
+            font-size: 60px;
             animation: beat 0.8s infinite alternate;
-            margin-bottom: 15px;
         }
 
         @keyframes beat {
             from { transform: scale(1); }
-            to { transform: scale(1.15); }
-        }
-
-        h1 {
-            color: #333;
-            font-size: 1.8rem;
-            margin-bottom: 10px;
+            to { transform: scale(1.1); }
         }
 
         .btn-container {
@@ -68,7 +58,8 @@
             justify-content: center;
             gap: 20px;
             margin-top: 30px;
-            height: 50px; /* Space for the absolute button */
+            position: relative;
+            height: 50px;
         }
 
         button {
@@ -78,20 +69,19 @@
             font-size: 1.1rem;
             font-weight: bold;
             cursor: pointer;
-            transition: 0.3s;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: 0.2s; /* Faster transition for the runaway effect */
         }
 
         #yes-btn {
             background-color: #e91e63;
             color: white;
-            z-index: 11;
         }
 
         #no-btn {
             background-color: #ff9a9e;
             color: white;
-            position: absolute;
+            position: absolute; /* Needed to move around the screen */
+            left: 180px; /* Initial position */
         }
 
         #hidden-message {
@@ -100,7 +90,6 @@
             color: #e91e63;
             font-weight: bold;
             font-size: 1.6rem;
-            line-height: 1.4;
         }
     </style>
 </head>
@@ -111,55 +100,49 @@
         <h1 id="question">Rishitha, will you be my Valentine?</h1>
         
         <div class="btn-container" id="actions">
-            <button id="yes-btn" onclick="sayYes()">Yes!</button>
+            <button id="yes-btn" onclick="sayYes()">Yes</button>
             <button id="no-btn" onmouseover="moveButton()" onclick="moveButton()">No</button>
         </div>
 
-        <div id="hidden-message">I knew you'd say yes, Rishitha! 🥰🌹<br>Can't wait!</div>
+        <div id="hidden-message">I knew you'd say yes, Rishitha! 🥰🌹</div>
     </div>
 
     <script>
-        // Makes the "No" button jump away
+        // The "Runaway" Function
         function moveButton() {
             const btn = document.getElementById('no-btn');
-            // Ensure button stays within visible window
-            const x = Math.random() * (window.innerWidth - btn.offsetWidth);
-            const y = Math.random() * (window.innerHeight - btn.offsetHeight);
             
+            // Calculate random coordinates
+            // We subtract 100px to ensure the button doesn't go off the edge of the screen
+            const x = Math.random() * (window.innerWidth - 100);
+            const y = Math.random() * (window.innerHeight - 50);
+            
+            // Set the new position
+            btn.style.position = 'fixed';
             btn.style.left = x + 'px';
             btn.style.top = y + 'px';
-            btn.style.position = 'fixed';
         }
 
-        // Action when she clicks Yes
         function sayYes() {
             document.getElementById('actions').style.display = 'none';
             document.getElementById('question').innerText = "Yay! ❤️";
             document.getElementById('hidden-message').style.display = 'block';
             
-            // Celebration: shower of hearts!
+            // Celebration: Shower of hearts
             setInterval(createHeart, 100);
         }
 
-        // Falling hearts logic
         function createHeart() {
             const heart = document.createElement('div');
             heart.classList.add('falling-heart');
             heart.innerHTML = '❤️';
             heart.style.left = Math.random() * 100 + "vw";
             heart.style.animationDuration = Math.random() * 2 + 3 + "s";
-            heart.style.opacity = Math.random();
-            heart.style.fontSize = Math.random() * 20 + 10 + "px";
-            
             document.body.appendChild(heart);
-
-            setTimeout(() => {
-                heart.remove();
-            }, 5000);
+            setTimeout(() => { heart.remove(); }, 5000);
         }
 
-        // Subtle background hearts on load
-        setInterval(createHeart, 600);
+        setInterval(createHeart, 500);
     </script>
 </body>
 </html>
