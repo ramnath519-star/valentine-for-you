@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Special Surprise for Rishitha ❤️</title>
+    <title>A Surprise for Rishitha ❤️</title>
     <style>
         body {
             background-color: #ffe4e1;
@@ -55,7 +55,7 @@
             to { transform: scale(1.15); }
         }
 
-        h1 { color: #d63384; font-size: 22px; margin: 20px 0; min-height: 80px; display: flex; align-items: center; justify-content: center; }
+        h1 { color: #d63384; font-size: 22px; margin: 20px 0; min-height: 80px; display: flex; align-items: center; justify-content: center; line-height: 1.4; }
 
         .btn-container {
             display: flex;
@@ -78,7 +78,6 @@
         }
 
         #yes-btn { background-color: #ff4d6d; color: white; transition: 0.2s; }
-        
         #no-btn { 
             background-color: #adb5bd; 
             color: white; 
@@ -111,7 +110,7 @@
 <body onclick="playMusic()">
 
     <audio id="bgMusic" loop>
-        <source src="https://files.catbox.moe/39k013.mp3" type="audio/mpeg">
+        <source src="https://www.mboxdrive.com/JAWNY%20-%20Honeypie.mp3" type="audio/mpeg">
     </audio>
 
     <div class="card">
@@ -149,17 +148,15 @@
 
         function playMusic() { 
             music.play().catch(() => {
-                console.log("Interact with page to play audio");
+                console.log("Waiting for interaction...");
             }); 
         }
 
-        // Runaway Button Logic
         function moveNo() {
             playMusic();
             const btn = document.getElementById('no-btn');
             btn.style.position = 'fixed';
             
-            // Randomly move button within the window bounds
             const maxX = window.innerWidth - btn.offsetWidth - 20;
             const maxY = window.innerHeight - btn.offsetHeight - 20;
             
@@ -175,11 +172,9 @@
             currentStep++;
 
             if (currentStep < questions.length) {
-                // Update text to next question
                 document.getElementById('question-text').innerText = questions[currentStep];
                 document.getElementById('step-text').innerText = `Step ${currentStep + 1} of 6`;
                 
-                // Return No button to card momentarily for the new question
                 const noBtn = document.getElementById('no-btn');
                 noBtn.style.position = 'relative';
                 noBtn.style.left = '0';
@@ -193,7 +188,7 @@
             document.getElementById('quiz-box').style.display = 'none';
             document.getElementById('success-msg').style.display = 'block';
             startCountdown();
-            setInterval(createHeart, 100); // Massive heart/glitter shower
+            setInterval(createHeart, 100);
         }
 
         function startCountdown() {
@@ -219,7 +214,6 @@
             setTimeout(() => { heart.remove(); }, 5000);
         }
 
-        // Continuous slow background hearts
         setInterval(createHeart, 600);
     </script>
 </body>
