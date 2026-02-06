@@ -7,107 +7,115 @@
 
 <style>
 body {
-  background-color:#ffe4e1;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  height:100vh;
-  margin:0;
-  font-family:'Segoe UI',Tahoma,sans-serif;
-  overflow:hidden;
-  touch-action:none;
+  background-color: #ffe4e1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  overflow: hidden;
+  touch-action: none;
 }
 
 .falling-heart {
-  position:fixed;
-  top:-10vh;
-  color:#ff4d6d;
-  font-size:20px;
-  z-index:-1;
-  animation:fall linear forwards;
+  position: fixed;
+  top: -10vh;
+  color: #ff4d6d;
+  font-size: 20px;
+  user-select: none;
+  z-index: -1;
+  animation: fall linear forwards;
 }
-@keyframes fall { to{transform:translateY(110vh) rotate(360deg)} }
+@keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
 
 .card {
-  background:rgba(255,255,255,.95);
-  padding:40px;
-  border-radius:30px;
-  box-shadow:0 20px 50px rgba(233,30,99,.2);
-  text-align:center;
-  width:320px;
-  z-index:10;
-  position:relative;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 40px;
+  border-radius: 30px;
+  box-shadow: 0 20px 50px rgba(233, 30, 99, 0.2);
+  text-align: center;
+  width: 320px;
+  backdrop-filter: blur(10px);
+  z-index: 10;
+  border: 2px solid #fff;
+  position: relative;
 }
 
-.main-heart {
-  font-size:60px;
-  animation:pulse .8s infinite alternate;
+.main-heart { 
+  font-size: 60px; 
+  animation: pulse 0.8s infinite alternate; 
 }
-@keyframes pulse { from{transform:scale(1)} to{transform:scale(1.15)} }
+@keyframes pulse { from { transform: scale(1); } to { transform: scale(1.15); } }
 
 h1 {
-  color:#d63384;
-  font-size:22px;
-  min-height:80px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  line-height:1.4;
+  color: #d63384;
+  font-size: 22px;
+  margin: 20px 0;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.4;
 }
 
 .btn-container {
-  display:flex;
-  justify-content:center;
-  gap:20px;
-  margin-top:20px;
-  min-height:60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  margin-top: 20px;
+  min-height: 60px;
 }
 
 button {
-  padding:12px 30px;
-  font-size:18px;
-  font-weight:bold;
-  border:none;
-  border-radius:50px;
-  cursor:pointer;
+  padding: 12px 30px;
+  font-size: 18px;
+  font-weight: bold;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
-#yes-btn { background:#ff4d6d;color:white }
-#no-btn  { background:#adb5bd;color:white;position:relative }
+#yes-btn { background-color: #ff4d6d; color: white; }
+#no-btn { background-color: #adb5bd; color: white; position: relative; }
 
-#success-msg { display:none }
+#success-msg { display: none; }
 
 #countdown {
-  margin-top:20px;
-  font-weight:bold;
-  color:#ff4d6d;
-  background:#fff0f3;
-  padding:15px;
-  border-radius:15px;
-  border:1px dashed #ff4d6d;
+  margin-top: 20px;
+  font-weight: bold;
+  color: #ff4d6d;
+  font-size: 1.1rem;
+  background: #fff0f3;
+  padding: 15px;
+  border-radius: 15px;
+  border: 1px dashed #ff4d6d;
 }
 
 .progress {
-  font-size:11px;
-  color:#ff758c;
-  margin-bottom:10px;
-  text-transform:uppercase;
-  letter-spacing:1px;
+  font-size: 11px;
+  color: #ff758c;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
-/* hidden youtube */
+/* Hide YouTube player */
 #yt-player {
-  position:absolute;
-  width:1px;
-  height:1px;
-  opacity:0;
-  pointer-events:none;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
 }
 </style>
 </head>
 
-<body onclick="initMusic()">
+<body onclick="startMusic()">
 
+<!-- Hidden YouTube Player -->
 <div id="yt-player"></div>
 
 <div class="card">
@@ -126,114 +134,100 @@ button {
     <div class="main-heart">🥰</div>
     <h2>Yay! ❤️</h2>
     <p>I knew you'd say yes, Rishitha!</p>
-    <div id="countdown"></div>
+    <div id="countdown">Calculating our time...</div>
   </div>
 </div>
 
 <script src="https://www.youtube.com/iframe_api"></script>
 
 <script>
-/* QUESTIONS */
-const questions=[
- "Rishitha, do you believe in love?",
- "Rishitha, would you go on a Valentine’s date with me?",
- "Rishitha, do small surprises make you happy?",
- "Rishitha, is spending time together more important than gifts?",
- "Rishitha, do you think we’d make a good pair?",
- "Rishitha, will you be my Valentine?"
+const questions = [
+  "Rishitha, do you believe in love?",
+  "Rishitha, would you go on a Valentine’s date with me?",
+  "Rishitha, do small surprises make you happy?",
+  "Rishitha, is spending time together more important than gifts?",
+  "Rishitha, do you think we’d make a good pair?",
+  "Rishitha, will you be my Valentine?"
 ];
 
-let currentStep=0;
+let currentStep = 0;
+let player;
+let musicStarted = false;
 
-/* 🎵 YOUTUBE SONGS (SHUFFLED) */
-let songs=[
- "rC0YWZ0lly8",
- "WvFk5v7INVg",
- "Hv0D-S2ZyAs",
- "JGwWNGJdvx8",
- "2Vv-BfVoq4g",
- "lp-EO5I60KA"
-].sort(()=>Math.random()-0.5);
-
-let player, musicReady=false;
-
-/* YOUTUBE PLAYER */
-function onYouTubeIframeAPIReady(){
-  player=new YT.Player("yt-player",{
-    videoId:songs[0],
-    playerVars:{
-      autoplay:0,
-      controls:0,
-      loop:1,
-      playlist:songs.join(","),
-      modestbranding:1
+/* YouTube API */
+function onYouTubeIframeAPIReady() {
+  player = new YT.Player('yt-player', {
+    videoId: '8HyuVJZe5Xk',
+    playerVars: {
+      autoplay: 0,
+      controls: 0,
+      loop: 1,
+      playlist: '8HyuVJZe5Xk',
+      modestbranding: 1
     }
   });
 }
 
-/* INIT MUSIC ON FIRST TAP */
-function initMusic(){
-  if(player && !musicReady){
+/* Start music on first interaction */
+function startMusic() {
+  if (player && !musicStarted) {
     player.playVideo();
-    musicReady=true;
+    musicStarted = true;
   }
 }
 
-/* NO BUTTON ESCAPE */
-function moveNo(){
-  initMusic();
-  const btn=document.getElementById("no-btn");
-  btn.style.position="fixed";
-  btn.style.left=Math.random()*(window.innerWidth-btn.offsetWidth)+"px";
-  btn.style.top=Math.random()*(window.innerHeight-btn.offsetHeight)+"px";
+function moveNo() {
+  startMusic();
+  const btn = document.getElementById('no-btn');
+  btn.style.position = 'fixed';
+  const maxX = window.innerWidth - btn.offsetWidth - 20;
+  const maxY = window.innerHeight - btn.offsetHeight - 20;
+  btn.style.left = Math.floor(Math.random() * maxX) + 'px';
+  btn.style.top = Math.floor(Math.random() * maxY) + 'px';
 }
 
-/* NEXT QUESTION + CHANGE SONG */
-function nextQuestion(){
-  initMusic();
+function nextQuestion() {
+  startMusic();
   currentStep++;
-
-  if(currentStep < questions.length){
-    document.getElementById("question-text").innerText=questions[currentStep];
-    document.getElementById("step-text").innerText=`Step ${currentStep+1} of 6`;
-    document.getElementById("no-btn").style.position="relative";
-
-    if(player){
-      player.loadVideoById(songs[currentStep % songs.length]);
-    }
+  if (currentStep < questions.length) {
+    document.getElementById('question-text').innerText = questions[currentStep];
+    document.getElementById('step-text').innerText = `Step ${currentStep + 1} of 6`;
+    const noBtn = document.getElementById('no-btn');
+    noBtn.style.position = 'relative';
+    noBtn.style.left = '0';
+    noBtn.style.top = '0';
   } else {
-    document.getElementById("quiz-box").style.display="none";
-    document.getElementById("success-msg").style.display="block";
+    document.getElementById('quiz-box').style.display = 'none';
+    document.getElementById('success-msg').style.display = 'block';
     startCountdown();
-    setInterval(createHeart,100);
+    setInterval(createHeart, 100);
   }
 }
 
-/* COUNTDOWN */
-function startCountdown(){
-  const target=new Date("Feb 14, 2026 00:00:00").getTime();
-  setInterval(()=>{
-    const now=new Date().getTime();
-    const d=Math.floor((target-now)/86400000);
-    const h=Math.floor((target-now)%86400000/3600000);
-    const m=Math.floor((target-now)%3600000/60000);
-    const s=Math.floor((target-now)%60000/1000);
-    document.getElementById("countdown").innerText=
+function startCountdown() {
+  const countDate = new Date("Feb 14, 2026 00:00:00").getTime();
+  setInterval(() => {
+    const now = new Date().getTime();
+    const gap = countDate - now;
+    const d = Math.floor(gap / (1000 * 60 * 60 * 24));
+    const h = Math.floor((gap % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const m = Math.floor((gap % (1000 * 60 * 60)) / (1000 * 60));
+    const s = Math.floor((gap % (1000 * 60)) / 1000);
+    document.getElementById("countdown").innerText =
       `Our date in: ${d}d ${h}h ${m}m ${s}s`;
-  },1000);
+  }, 1000);
 }
 
-/* FALLING HEARTS */
-function createHeart(){
-  const h=document.createElement("div");
-  h.className="falling-heart";
-  h.innerText="❤️";
-  h.style.left=Math.random()*100+"vw";
-  h.style.animationDuration=(Math.random()*3+2)+"s";
-  document.body.appendChild(h);
-  setTimeout(()=>h.remove(),5000);
+function createHeart() {
+  const heart = document.createElement('div');
+  heart.className = 'falling-heart';
+  heart.innerHTML = '❤️';
+  heart.style.left = Math.random() * 100 + 'vw';
+  heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
+  document.body.appendChild(heart);
+  setTimeout(() => heart.remove(), 5000);
 }
-setInterval(createHeart,600);
+setInterval(createHeart, 600);
 </script>
 
 </body>
