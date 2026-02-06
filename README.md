@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Surprise for Rishitha ❤️</title>
+    <title>For Rishitha ❤️</title>
     <style>
         body {
             background-color: #ffe4e1;
@@ -32,16 +32,15 @@
         }
 
         .card {
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             padding: 40px;
             border-radius: 30px;
             box-shadow: 0 20px 50px rgba(233, 30, 99, 0.2);
             text-align: center;
-            width: 350px;
+            width: 320px;
             backdrop-filter: blur(10px);
             z-index: 10;
             border: 2px solid #fff;
-            position: relative;
         }
 
         .main-heart { 
@@ -76,11 +75,10 @@
             z-index: 20;
         }
 
-        #yes-btn { background-color: #ff4d6d; color: white; transition: 0.2s; }
-        #no-btn { background-color: #adb5bd; color: white; position: relative; transition: 0.1s ease; }
+        #yes-btn { background-color: #ff4d6d; color: white; }
+        #no-btn { background-color: #adb5bd; color: white; position: relative; transition: 0.15s ease; }
 
         #success-msg { display: none; }
-        
         #countdown {
             margin-top: 20px;
             font-weight: bold;
@@ -97,14 +95,13 @@
             color: #ff758c;
             margin-bottom: 10px;
             text-transform: uppercase;
-            letter-spacing: 1px;
         }
     </style>
 </head>
 <body onclick="playMusic()">
 
     <audio id="bgMusic" loop>
-        <source src="https://www.mboxdrive.com/Ed%20Sheeran%20-%20Shape%20Of%20You.mp3" type="audio/mpeg">
+        <source src="https://files.catbox.moe/p9r754.mp3" type="audio/mpeg">
     </audio>
 
     <div class="card">
@@ -122,8 +119,8 @@
         <div id="success-msg">
             <div class="main-heart">🥰</div>
             <h2>Yay! ❤️</h2>
-            <p>I knew you'd say yes to everything, Rishitha!</p>
-            <div id="countdown">Calculating our time...</div>
+            <p>I knew you'd say yes, Rishitha!</p>
+            <div id="countdown">Calculating...</div>
         </div>
     </div>
 
@@ -140,9 +137,7 @@
         let currentStep = 0;
         const music = document.getElementById("bgMusic");
 
-        function playMusic() { 
-            music.play().catch(() => { console.log("Music will start on interaction"); }); 
-        }
+        function playMusic() { music.play().catch(() => {}); }
 
         function moveNo() {
             playMusic();
@@ -150,10 +145,8 @@
             btn.style.position = 'fixed';
             const maxX = window.innerWidth - btn.offsetWidth - 20;
             const maxY = window.innerHeight - btn.offsetHeight - 20;
-            const randomX = Math.floor(Math.random() * maxX);
-            const randomY = Math.floor(Math.random() * maxY);
-            btn.style.left = randomX + 'px';
-            btn.style.top = randomY + 'px';
+            btn.style.left = Math.floor(Math.random() * maxX) + 'px';
+            btn.style.top = Math.floor(Math.random() * maxY) + 'px';
         }
 
         function nextQuestion() {
@@ -164,18 +157,13 @@
                 document.getElementById('step-text').innerText = `Step ${currentStep + 1} of 6`;
                 const noBtn = document.getElementById('no-btn');
                 noBtn.style.position = 'relative';
-                noBtn.style.left = '0';
-                noBtn.style.top = '0';
+                noBtn.style.left = '0'; noBtn.style.top = '0';
             } else {
-                showFinal();
+                document.getElementById('quiz-box').style.display = 'none';
+                document.getElementById('success-msg').style.display = 'block';
+                startCountdown();
+                setInterval(createHeart, 100);
             }
-        }
-
-        function showFinal() {
-            document.getElementById('quiz-box').style.display = 'none';
-            document.getElementById('success-msg').style.display = 'block';
-            startCountdown();
-            setInterval(createHeart, 100);
         }
 
         function startCountdown() {
@@ -194,7 +182,7 @@
         function createHeart() {
             const heart = document.createElement('div');
             heart.className = 'falling-heart';
-            heart.innerHTML = Math.random() > 0.5 ? '❤️' : '✨';
+            heart.innerHTML = '❤️';
             heart.style.left = Math.random() * 100 + 'vw';
             heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
             document.body.appendChild(heart);
