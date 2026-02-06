@@ -14,9 +14,10 @@
             margin: 0;
             font-family: 'Arial', sans-serif;
             overflow: hidden;
+            cursor: pointer; /* Suggests clicking */
         }
 
-        /* Floating Hearts Background */
+        /* Falling Hearts */
         .heart-bg {
             position: fixed;
             top: -10vh;
@@ -32,20 +33,17 @@
         }
 
         .card {
-            background: white;
+            background: rgba(255, 255, 255, 0.9);
             padding: 40px;
             border-radius: 30px;
             box-shadow: 0 20px 50px rgba(0,0,0,0.1);
             text-align: center;
             width: 350px;
-            position: relative;
+            backdrop-filter: blur(10px);
             z-index: 10;
         }
 
-        .main-heart {
-            font-size: 80px;
-            animation: pulse 1s infinite alternate;
-        }
+        .main-heart { font-size: 70px; animation: pulse 1s infinite alternate; }
 
         @keyframes pulse {
             from { transform: scale(1); }
@@ -53,50 +51,51 @@
         }
 
         h1 { color: #d63384; margin: 20px 0; font-size: 24px; }
+        p.tap-hint { font-size: 12px; color: #999; margin-top: -10px; }
 
         .button-box {
             display: flex;
             justify-content: center;
             gap: 20px;
             margin-top: 30px;
-            height: 60px; /* Buffer for buttons */
+            height: 50px;
         }
 
         .btn {
-            padding: 15px 35px;
+            padding: 12px 30px;
             font-size: 18px;
             font-weight: bold;
             border: none;
             border-radius: 50px;
             cursor: pointer;
-            transition: transform 0.2s ease;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
-        #yes-btn {
-            background-color: #ff4d6d;
-            color: white;
+        #yes-btn { background-color: #ff4d6d; color: white; transition: 0.3s; }
+        #yes-btn:hover { transform: scale(1.1); background-color: #ff758c; }
+
+        #no-btn { 
+            background-color: #adb5bd; 
+            color: white; 
+            position: absolute; 
+            transition: 0.1s; /* Quick jump */
         }
 
-        #no-btn {
-            background-color: #adb5bd;
-            color: white;
-            position: absolute; /* Allows freedom of movement */
-        }
-
-        #success-msg {
-            display: none;
-        }
-
-        #success-msg h2 { color: #ff4d6d; font-size: 28px; }
+        #success-msg { display: none; }
+        #success-msg h2 { color: #ff4d6d; font-size: 28px; margin-bottom: 10px; }
     </style>
 </head>
-<body>
+<body onclick="startMusic()">
 
-    <div class="card" id="main-card">
+    <audio id="bgMusic" loop>
+        <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="card">
         <div id="proposal-content">
             <div class="main-heart">💖</div>
             <h1>Rishitha, will you be my Valentine?</h1>
+            <p class="tap-hint">(Tap anywhere for music 🎵)</p>
             <div class="button-box">
                 <button id="yes-btn" class="btn" onclick="celebrate()">Yes</button>
                 <button id="no-btn" class="btn" onmouseover="moveNo()" onclick="moveNo()">No</button>
@@ -105,52 +104,52 @@
 
         <div id="success-msg">
             <div class="main-heart">🥰</div>
-            <h2>I knew it! ❤️</h2>
-            <p>See you soon, Rishitha!</p>
+            <h2>Yay! ❤️</h2>
+            <p>You've made me the luckiest person, Rishitha!</p>
         </div>
     </div>
 
     <script>
-        // Function to move the "No" button randomly
+        const audio = document.getElementById("bgMusic");
+
+        function startMusic() {
+            audio.play();
+        }
+
+        // Logic for the runaway button
         function moveNo() {
             const btn = document.getElementById('no-btn');
-            
-            // Generate random X and Y coordinates within the viewport
-            // We subtract button size to keep it within view
-            const x = Math.floor(Math.random() * (window.innerWidth - btn.offsetWidth));
-            const y = Math.floor(Math.random() * (window.innerHeight - btn.offsetHeight));
+            // Logic to keep button inside the screen area
+            const x = Math.floor(Math.random() * (window.innerWidth - btn.offsetWidth - 20));
+            const y = Math.floor(Math.random() * (window.innerHeight - btn.offsetHeight - 20));
 
-            btn.style.position = 'fixed'; // Keeps it relative to the screen
+            btn.style.position = 'fixed';
             btn.style.left = x + 'px';
             btn.style.top = y + 'px';
         }
 
-        // Function when she clicks "Yes"
+        // Logic for when she says Yes
         function celebrate() {
             document.getElementById('proposal-content').style.display = 'none';
             document.getElementById('success-msg').style.display = 'block';
             
-            // Trigger extra heart burst
-            for(let i=0; i<50; i++) {
-                setTimeout(createHeart, i * 50);
-            }
+            // Increase falling heart speed for celebration
+            setInterval(createHeart, 100);
         }
 
-        // Create falling hearts background
+        // Falling heart background generator
         function createHeart() {
             const heart = document.createElement('div');
             heart.className = 'heart-bg';
             heart.innerHTML = '❤️';
             heart.style.left = Math.random() * 100 + 'vw';
             heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
-            heart.style.opacity = Math.random();
             document.body.appendChild(heart);
-
             setTimeout(() => { heart.remove(); }, 5000);
         }
 
-        // Start background hearts
-        setInterval(createHeart, 400);
+        // Initialize slow falling hearts
+        setInterval(createHeart, 500);
     </script>
 </body>
 </html>
