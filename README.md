@@ -55,7 +55,7 @@
             to { transform: scale(1.15); }
         }
 
-        h1 { color: #d63384; font-size: 22px; margin: 20px 0; min-height: 60px; }
+        h1 { color: #d63384; font-size: 22px; margin: 20px 0; min-height: 80px; display: flex; align-items: center; justify-content: center; }
 
         .btn-container {
             display: flex;
@@ -119,7 +119,7 @@
         <div id="quiz-box">
             <div class="progress" id="step-text">Question 1 of 6</div>
             <div class="main-heart">💖</div>
-            <h1 id="question-text">Do you believe in love at first sight?</h1>
+            <h1 id="question-text">Do you believe in love?</h1>
             
             <div class="btn-container">
                 <button id="yes-btn" onclick="nextQuestion()">Yes</button>
@@ -137,7 +137,7 @@
 
     <script>
         const questions = [
-            "Do you believe in love at first sight?",
+            "Do you believe in love?",
             "Would you go on a Valentine’s date with me?",
             "Do small surprises make you happy?",
             "Is spending time together more important than gifts?",
@@ -172,11 +172,10 @@
             currentStep++;
 
             if (currentStep < questions.length) {
-                // Update text
                 document.getElementById('question-text').innerText = questions[currentStep];
                 document.getElementById('step-text').innerText = `Question ${currentStep + 1} of 6`;
                 
-                // Bring No button back to center for a moment to be fair (briefly)
+                // Reset No button position for the new question
                 const noBtn = document.getElementById('no-btn');
                 noBtn.style.position = 'relative';
                 noBtn.style.left = '0';
@@ -190,7 +189,7 @@
             document.getElementById('quiz-box').style.display = 'none';
             document.getElementById('success-msg').style.display = 'block';
             startCountdown();
-            setInterval(createHeart, 100); // Massive celebration
+            setInterval(createHeart, 100);
         }
 
         function startCountdown() {
