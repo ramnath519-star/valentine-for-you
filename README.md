@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>For Rishitha ❤️</title>
+    <script src="https://w.soundcloud.com/player/api.js"></script>
     <style>
         body {
             background-color: #ffe4e1;
@@ -41,6 +42,7 @@
             backdrop-filter: blur(10px);
             z-index: 10;
             border: 2px solid #fff;
+            position: relative;
         }
 
         .main-heart { 
@@ -76,9 +78,10 @@
         }
 
         #yes-btn { background-color: #ff4d6d; color: white; }
-        #no-btn { background-color: #adb5bd; color: white; position: relative; transition: 0.15s ease; }
+        #no-btn { background-color: #adb5bd; color: white; position: relative; transition: 0.1s ease; }
 
         #success-msg { display: none; }
+        
         #countdown {
             margin-top: 20px;
             font-weight: bold;
@@ -96,19 +99,22 @@
             margin-bottom: 10px;
             text-transform: uppercase;
         }
+
+        /* The SoundCloud player is kept invisible */
+        #sc-player { display: none; }
     </style>
 </head>
-<body onclick="playMusic()">
+<body>
 
-    <audio id="bgMusic" loop>
-        <source src="https://files.catbox.moe/p9r754.mp3" type="audio/mpeg">
-    </audio>
+    <iframe id="sc-player" width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" 
+        src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/837648355&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true">
+    </iframe>
 
     <div class="card">
         <div id="quiz-box">
             <div class="progress" id="step-text">Step 1 of 6</div>
             <div class="main-heart">💖</div>
-            <h1 id="question-text">Do you believe in love?</h1>
+            <h1 id="question-text">Rishitha, do you believe in love?</h1>
             
             <div class="btn-container">
                 <button id="yes-btn" onclick="nextQuestion()">Yes</button>
@@ -119,25 +125,33 @@
         <div id="success-msg">
             <div class="main-heart">🥰</div>
             <h2>Yay! ❤️</h2>
-            <p>I knew you'd say yes, Rishitha!</p>
-            <div id="countdown">Calculating...</div>
+            <p>I knew you'd say yes to everything, Rishitha!</p>
+            <div id="countdown">Calculating our time...</div>
         </div>
     </div>
 
     <script>
         const questions = [
-            "Do you believe in love?",
-            "Would you go on a Valentine’s date with me?",
-            "Do small surprises make you happy?",
-            "Is spending time together more important than gifts?",
-            "Do you think we’d make a good pair?",
+            "Rishitha, do you believe in love?",
+            "Rishitha, would you go on a Valentine’s date with me?",
+            "Rishitha, do small surprises make you happy?",
+            "Rishitha, is spending time together more important than gifts?",
+            "Rishitha, do you think we’d make a good pair?",
             "Rishitha, will you be my Valentine?"
         ];
 
         let currentStep = 0;
-        const music = document.getElementById("bgMusic");
+        let musicStarted = false;
+        
+        // Initialize the SoundCloud widget
+        const widget = SC.Widget(document.getElementById('sc-player'));
 
-        function playMusic() { music.play().catch(() => {}); }
+        function playMusic() {
+            if (!musicStarted) {
+                widget.play();
+                musicStarted = true;
+            }
+        }
 
         function moveNo() {
             playMusic();
@@ -167,6 +181,7 @@
         }
 
         function startCountdown() {
+            // Updated to Valentine's Day 2026
             const countDate = new Date("Feb 14, 2026 00:00:00").getTime();
             setInterval(() => {
                 const now = new Date().getTime();
