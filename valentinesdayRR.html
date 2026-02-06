@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For Rishitha ❤️</title>
+    <title>A Special Surprise for Rishitha ❤️</title>
     <style>
         body {
             background-color: #ffe4e1;
@@ -17,7 +17,7 @@
             touch-action: none;
         }
 
-        /* Falling Hearts/Glitters */
+        /* Falling Hearts/Glitters Background */
         .falling-heart {
             position: fixed;
             top: -10vh;
@@ -38,15 +38,15 @@
             border-radius: 30px;
             box-shadow: 0 20px 50px rgba(233, 30, 99, 0.2);
             text-align: center;
-            width: 340px;
+            width: 350px;
             backdrop-filter: blur(10px);
             z-index: 10;
             border: 2px solid #fff;
-            position: relative; /* Keep buttons relative to card initially */
+            position: relative;
         }
 
         .main-heart { 
-            font-size: 70px; 
+            font-size: 60px; 
             animation: pulse 0.8s infinite alternate; 
         }
 
@@ -55,14 +55,14 @@
             to { transform: scale(1.15); }
         }
 
-        h1 { color: #d63384; font-size: 24px; margin: 20px 0; }
+        h1 { color: #d63384; font-size: 22px; margin: 20px 0; min-height: 60px; }
 
         .btn-container {
             display: flex;
             justify-content: center;
             align-items: center;
             gap: 20px;
-            margin-top: 30px;
+            margin-top: 20px;
             min-height: 60px;
         }
 
@@ -77,20 +77,17 @@
             z-index: 20;
         }
 
-        #yes-btn { 
-            background-color: #ff4d6d; 
-            color: white; 
-        }
+        #yes-btn { background-color: #ff4d6d; color: white; transition: 0.2s; }
+        #yes-btn:active { transform: scale(0.9); }
 
         #no-btn { 
             background-color: #adb5bd; 
             color: white; 
+            position: relative;
             transition: 0.1s ease;
-            position: relative; /* Starts visible inside the container */
         }
 
         #success-msg { display: none; }
-        #success-msg h2 { color: #d63384; font-size: 28px; }
         
         #countdown {
             margin-top: 20px;
@@ -102,6 +99,14 @@
             border-radius: 15px;
             border: 1px dashed #ff4d6d;
         }
+
+        .progress {
+            font-size: 12px;
+            color: #ff758c;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
     </style>
 </head>
 <body onclick="playMusic()">
@@ -111,12 +116,13 @@
     </audio>
 
     <div class="card">
-        <div id="proposal-box">
+        <div id="quiz-box">
+            <div class="progress" id="step-text">Question 1 of 6</div>
             <div class="main-heart">💖</div>
-            <h1>Rishitha, will you be my Valentine?</h1>
+            <h1 id="question-text">Do you believe in love at first sight?</h1>
             
             <div class="btn-container">
-                <button id="yes-btn" onclick="sayYes()">Yes</button>
+                <button id="yes-btn" onclick="nextQuestion()">Yes</button>
                 <button id="no-btn" onmouseover="moveNo()" ontouchstart="moveNo()">No</button>
             </div>
         </div>
@@ -124,12 +130,22 @@
         <div id="success-msg">
             <div class="main-heart">🥰</div>
             <h2>Yay! ❤️</h2>
-            <p>I knew you'd say yes, Rishitha!</p>
-            <div id="countdown">Calculating...</div>
+            <p>I knew you'd say yes to everything, Rishitha!</p>
+            <div id="countdown">Calculating our time...</div>
         </div>
     </div>
 
     <script>
+        const questions = [
+            "Do you believe in love at first sight?",
+            "Would you go on a Valentine’s date with me?",
+            "Do small surprises make you happy?",
+            "Is spending time together more important than gifts?",
+            "Do you think we’d make a good pair?",
+            "Rishitha, will you be my Valentine?"
+        ];
+
+        let currentStep = 0;
         const music = document.getElementById("bgMusic");
 
         function playMusic() { 
@@ -139,23 +155,42 @@
         function moveNo() {
             playMusic();
             const btn = document.getElementById('no-btn');
-            
-            // Switch to fixed positioning so it can jump ANYWHERE on the screen
             btn.style.position = 'fixed';
             
-            const x = Math.random() * (window.innerWidth - btn.offsetWidth - 20);
-            const y = Math.random() * (window.innerHeight - btn.offsetHeight - 20);
+            const maxX = window.innerWidth - btn.offsetWidth - 20;
+            const maxY = window.innerHeight - btn.offsetHeight - 20;
             
-            btn.style.left = `${x}px`;
-            btn.style.top = `${y}px`;
+            const randomX = Math.floor(Math.random() * maxX);
+            const randomY = Math.floor(Math.random() * maxY);
+            
+            btn.style.left = randomX + 'px';
+            btn.style.top = randomY + 'px';
         }
 
-        function sayYes() {
+        function nextQuestion() {
             playMusic();
-            document.getElementById('proposal-box').style.display = 'none';
+            currentStep++;
+
+            if (currentStep < questions.length) {
+                // Update text
+                document.getElementById('question-text').innerText = questions[currentStep];
+                document.getElementById('step-text').innerText = `Question ${currentStep + 1} of 6`;
+                
+                // Bring No button back to center for a moment to be fair (briefly)
+                const noBtn = document.getElementById('no-btn');
+                noBtn.style.position = 'relative';
+                noBtn.style.left = '0';
+                noBtn.style.top = '0';
+            } else {
+                showFinal();
+            }
+        }
+
+        function showFinal() {
+            document.getElementById('quiz-box').style.display = 'none';
             document.getElementById('success-msg').style.display = 'block';
             startCountdown();
-            setInterval(createHeart, 100);
+            setInterval(createHeart, 100); // Massive celebration
         }
 
         function startCountdown() {
@@ -167,7 +202,7 @@
                 const h = Math.floor((gap % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const m = Math.floor((gap % (1000 * 60 * 60)) / (1000 * 60));
                 const s = Math.floor((gap % (1000 * 60)) / 1000);
-                document.getElementById("countdown").innerText = `See you in: ${d}d ${h}h ${m}m ${s}s`;
+                document.getElementById("countdown").innerText = `Our date in: ${d}d ${h}h ${m}m ${s}s`;
             }, 1000);
         }
 
